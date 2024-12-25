@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sélecteur personnalisé Google Traduction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur mon site</h1>
+    <p>Sélectionnez une langue pour traduire la page :</p>
+
+    <!-- Sélecteur de langue personnalisé -->
+    <select id="languageSelector" onchange="translatePage()">
+        <option value="">-- Choisissez une langue --</option>
+        <option value="fr">Français</option>
+        <option value="de">Allemand</option>
+        <option value="es">Espagnol</option>
+        <option value="pt">Portugais (Portugal)</option>
+    </select>
+
+    <script type="text/javascript">
+        // Fonction pour charger le script Google Traduction
+        function loadGoogleTranslateScript() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+            document.body.appendChild(script);
+        }
+
+        // Initialisation du service Google Traduction
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'fr'
+            });
+        }
+
+        // Fonction pour traduire la page selon la langue sélectionnée
+        function translatePage() {
+            var language = document.getElementById("languageSelector").value;
+
+            // Vérifier si Google Traduction est chargé
+            if (typeof google === 'undefined' || typeof google.translate === 'undefined') {
+                alert("Veuillez attendre que Google Traduction se charge.");
+                return;
+            }
+
+            if (language) {
+                // Déclencher la traduction via le sélecteur interne
+                var iframe = document.querySelector("iframe.goog-te-banner-frame");
+                if (iframe) {
+                    var translateCombo = document.querySelector(".goog-te-combo");
+                    if (translateCombo) {
+                        translateCombo.value = language;
+                        translateCombo.dispatchEvent(new Event('change'));
+                    }
+                } else {
+                    alert("La traduction est en cours de chargement. Réessayez dans un instant.");
+                }
+            }
+        }
+
+        // Charger le script Google Traduction
+        loadGoogleTranslateScript();
+    </script>
+</body>
+</html>
